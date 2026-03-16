@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IATF AI Agent — Innovation Showcase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/white.min.css" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      :root {
+        --ghl-blue-50: #f3f9ff;
+        --ghl-blue-100: #e8f3fe;
+        --ghl-blue-200: #c5e2fd;
+        --ghl-blue-400: #5dadf9;
+        --ghl-blue-500: #178af6;
+        --ghl-blue-600: #157cdd;
+        --ghl-blue-700: #0e5394;
+        --ghl-blue-800: #0a3e6f;
+        --ghl-blue-900: #07294a;
+        --ghl-dark: #0c2d3f;
+        --ghl-dark-700: #071b26;
+        --ghl-gray-100: #e7eaec;
+        --ghl-gray-300: #9eabb2;
+        --ghl-teal-500: #38a0db;
+        --ghl-green-500: #2ead2e;
+        --ghl-green-100: #eaf7ea;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .reveal {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 28px !important;
+      }
+
+      .reveal .slides section {
+        text-align: left;
+        padding: 28px 44px;
+        box-sizing: border-box;
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        font-family: 'Inter', sans-serif;
+        color: var(--ghl-dark);
+        text-transform: none;
+        letter-spacing: -0.02em;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      .reveal h1 {
+        font-size: 2.2em;
+        line-height: 1.1;
+      }
+      .reveal h2 {
+        font-size: 1.35em;
+        margin-bottom: 8px;
+      }
+      .reveal h3 {
+        font-size: 0.85em;
+        color: var(--ghl-blue-700);
+        margin-bottom: 4px;
+      }
+
+      .reveal p,
+      .reveal li {
+        font-size: 0.68em;
+        line-height: 1.45;
+        color: #374151;
+        margin: 0;
+      }
+      .reveal p {
+        margin-bottom: 4px;
+      }
+
+      .reveal ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+      }
+      .reveal ul li {
+        position: relative;
+        padding-left: 1.2em;
+        margin-bottom: 3px;
+      }
+      .reveal ul li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.5em;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--ghl-blue-500);
+      }
+
+      .slide-label {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        font-size: 0.5em;
+        font-weight: 600;
+        color: var(--ghl-blue-500);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        background: var(--ghl-blue-50);
+        padding: 3px 12px;
+        border-radius: 20px;
+        z-index: 2;
+      }
+
+      /* Shared dark-slide base */
+      .dark-slide {
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: var(--ghl-dark);
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow: hidden;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .dark-slide::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 80% 60% at 20% 100%, rgba(23, 138, 246, 0.25) 0%, transparent 70%),
+          radial-gradient(ellipse 60% 50% at 85% 10%, rgba(56, 160, 219, 0.2) 0%, transparent 70%),
+          radial-gradient(ellipse 40% 40% at 50% 50%, rgba(14, 83, 148, 0.15) 0%, transparent 70%);
+        z-index: 0;
+      }
+      .dark-slide::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        z-index: 0;
+      }
+      .dark-slide > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Floating orbs */
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.35;
+        z-index: 0;
+        animation: float 8s ease-in-out infinite;
+      }
+      .orb-1 {
+        width: 300px;
+        height: 300px;
+        background: var(--ghl-blue-500);
+        top: -80px;
+        left: -60px;
+        animation-delay: 0s;
+      }
+      .orb-2 {
+        width: 250px;
+        height: 250px;
+        background: var(--ghl-teal-500);
+        bottom: -60px;
+        right: -40px;
+        animation-delay: -3s;
+      }
+      .orb-3 {
+        width: 180px;
+        height: 180px;
+        background: #5dadf9;
+        top: 30%;
+        right: 15%;
+        opacity: 0.2;
+        animation-delay: -5s;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px) scale(1);
+        }
+        50% {
+          transform: translateY(-20px) scale(1.05);
+        }
+      }
+
+      /* Decorative ring */
+      .deco-ring {
+        position: absolute;
+        border: 2px solid rgba(93, 173, 249, 0.15);
+        border-radius: 50%;
+        z-index: 0;
+      }
+      .deco-ring-1 {
+        width: 400px;
+        height: 400px;
+        top: -120px;
+        right: -100px;
+      }
+      .deco-ring-2 {
+        width: 300px;
+        height: 300px;
+        bottom: -80px;
+        left: -60px;
+      }
+      .deco-ring-3 {
+        width: 200px;
+        height: 200px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-color: rgba(93, 173, 249, 0.08);
+      }
+
+      /* Title slide */
+      .title-slide h1 {
+        color: #fff;
+        font-size: 2.6em;
+        font-weight: 800;
+        margin-bottom: 4px;
+        text-shadow: 0 0 40px rgba(23, 138, 246, 0.3);
+      }
+      .title-slide .subtitle {
+        color: var(--ghl-blue-200);
+        font-size: 0.85em;
+        font-weight: 400;
+        margin-bottom: 24px;
+      }
+      .team-info {
+        margin-top: 8px;
+      }
+      .team-info .team-label {
+        font-size: 0.45em;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--ghl-blue-400);
+        margin-bottom: 6px;
+      }
+      .team-info .team-members {
+        font-size: 0.7em;
+        font-weight: 600;
+        color: #fff;
+        letter-spacing: 0.02em;
+      }
+      .team-info .team-name {
+        display: inline-block;
+        font-size: 0.5em;
+        font-weight: 500;
+        color: var(--ghl-dark);
+        background: linear-gradient(90deg, var(--ghl-blue-400), var(--ghl-teal-500));
+        padding: 3px 14px;
+        border-radius: 20px;
+        margin-top: 8px;
+        letter-spacing: 0.04em;
+      }
+      .title-slide .accent-bar {
+        width: 70px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--ghl-blue-500), var(--ghl-teal-500));
+        border-radius: 2px;
+        margin: 0 auto 24px;
+        box-shadow: 0 0 16px rgba(23, 138, 246, 0.5);
+      }
+
+      /* Section divider slides */
+      .section-divider {
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--ghl-blue-50) 0%, #fff 100%);
+      }
+      .section-divider h2 {
+        font-size: 1.8em;
+        color: var(--ghl-dark);
+        margin-bottom: 4px;
+      }
+      .section-divider .section-number {
+        font-size: 3.2em;
+        font-weight: 800;
+        color: var(--ghl-blue-200);
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+      .section-divider p {
+        color: var(--ghl-gray-300);
+        font-size: 0.7em;
+        text-align: center;
+      }
+
+      /* Stats grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .stat-card {
+        background: var(--ghl-blue-50);
+        border-radius: 10px;
+        padding: 14px 12px;
+        text-align: center;
+        border: 1px solid var(--ghl-blue-200);
+      }
+      .stat-card .number {
+        font-size: 1.1em;
+        font-weight: 800;
+        color: var(--ghl-blue-600);
+        line-height: 1.1;
+      }
+      .stat-card .label {
+        font-size: 0.55em;
+        color: #6b7280;
+        margin-top: 4px;
+        line-height: 1.3;
+      }
+
+      /* Pain points */
+      .pain-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .pain-card {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        border-radius: 0 8px 8px 0;
+        padding: 8px 12px;
+      }
+      .pain-card .pain-title {
+        font-size: 0.7em;
+        font-weight: 700;
+        color: #991b1b;
+        margin-bottom: 1px;
+      }
+      .pain-card .pain-desc {
+        font-size: 0.58em;
+        color: #7f1d1d;
+        line-height: 1.35;
+      }
+
+      /* Before/after comparison */
+      .comparison {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 12px;
+        align-items: start;
+        margin-top: 8px;
+      }
+      .compare-col {
+        border-radius: 10px;
+        padding: 12px;
+      }
+      .compare-col.before {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+      }
+      .compare-col.after {
+        background: var(--ghl-green-100);
+        border: 1px solid #a7f3d0;
+      }
+      .compare-col h3 {
+        font-size: 0.8em;
+        margin-bottom: 4px;
+      }
+      .compare-col.before h3 {
+        color: #dc2626;
+      }
+      .compare-col.after h3 {
+        color: var(--ghl-green-500);
+      }
+      .compare-col ul li {
+        font-size: 0.62em;
+      }
+      .compare-col.before ul li::before {
+        background: #ef4444;
+      }
+      .compare-col.after ul li::before {
+        background: var(--ghl-green-500);
+      }
+      .compare-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4em;
+        color: var(--ghl-blue-500);
+        padding-top: 30px;
+      }
+
+      /* Capability cards */
+      .cap-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .cap-card {
+        background: #fff;
+        border: 1px solid var(--ghl-blue-200);
+        border-radius: 8px;
+        padding: 8px 10px;
+      }
+      .cap-card .cap-icon {
+        font-size: 0.9em;
+        margin-bottom: 2px;
+      }
+      .cap-card .cap-title {
+        font-size: 0.7em;
+        font-weight: 700;
+        color: var(--ghl-dark);
+        margin-bottom: 1px;
+      }
+      .cap-card .cap-desc {
+        font-size: 0.55em;
+        color: #6b7280;
+        line-height: 1.35;
+      }
+
+      /* Tech stack pills */
+      .tech-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 6px 0;
+      }
+      .tech-pill {
+        background: var(--ghl-blue-50);
+        border: 1px solid var(--ghl-blue-200);
+        border-radius: 6px;
+        padding: 4px 10px;
+        font-size: 0.6em;
+        font-weight: 600;
+        color: var(--ghl-blue-700);
+      }
+
+      /* Timeline */
+      .timeline {
+        margin-top: 10px;
+        position: relative;
+        padding-left: 28px;
+      }
+      .timeline::before {
+        content: '';
+        position: absolute;
+        left: 7px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--ghl-blue-200);
+        border-radius: 2px;
+      }
+      .timeline-item {
+        position: relative;
+        margin-bottom: 12px;
+      }
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -24px;
+        top: 3px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 3px solid var(--ghl-blue-500);
+        background: #fff;
+      }
+      .timeline-item.done::before {
+        background: var(--ghl-blue-500);
+      }
+      .timeline-item .tl-phase {
+        font-size: 0.7em;
+        font-weight: 700;
+        color: var(--ghl-dark);
+      }
+      .timeline-item .tl-detail {
+        font-size: 0.55em;
+        color: #6b7280;
+        line-height: 1.35;
+      }
+
+      /* Risk table */
+      .risk-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 8px;
+        font-size: 0.58em;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--ghl-blue-200);
+      }
+      .risk-table th {
+        background: var(--ghl-dark);
+        color: #fff;
+        padding: 6px 10px;
+        text-align: left;
+        font-weight: 600;
+      }
+      .risk-table td {
+        padding: 5px 10px;
+        border-bottom: 1px solid #e5e7eb;
+        color: #374151;
+        vertical-align: top;
+        line-height: 1.35;
+      }
+      .risk-table tr:last-child td {
+        border-bottom: none;
+      }
+      .risk-table tr:nth-child(even) td {
+        background: #f9fafb;
+      }
+
+      /* Demo slide */
+      .demo-slide h2 {
+        color: #fff;
+        font-size: 2.4em;
+        margin-bottom: 4px;
+        text-shadow: 0 0 40px rgba(23, 138, 246, 0.3);
+      }
+      .demo-slide p {
+        color: var(--ghl-blue-200);
+        font-size: 0.75em;
+        text-align: center;
+      }
+      .demo-slide .demo-icon {
+        font-size: 2.5em;
+        margin-bottom: 8px;
+        filter: drop-shadow(0 0 20px rgba(23, 138, 246, 0.4));
+      }
+      .demo-slide .demo-pulse {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        background: #ef4444;
+        border-radius: 50%;
+        margin-right: 8px;
+        vertical-align: middle;
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+        animation: pulse-dot 2s ease-in-out infinite;
+      }
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+        }
+        50% {
+          box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+        }
+      }
+
+      /* End slide */
+      .end-slide h2 {
+        color: #fff;
+        font-size: 2.2em;
+        margin-bottom: 4px;
+        text-shadow: 0 0 40px rgba(23, 138, 246, 0.3);
+      }
+      .end-slide p {
+        color: var(--ghl-blue-200);
+        font-size: 0.75em;
+        text-align: center;
+      }
+      .end-slide .end-line {
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--ghl-blue-500), var(--ghl-teal-500));
+        border-radius: 2px;
+        margin: 12px auto;
+        box-shadow: 0 0 12px rgba(23, 138, 246, 0.5);
+      }
+
+      /* ROI highlight */
+      .roi-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .roi-card {
+        background: #fff;
+        border: 1px solid var(--ghl-blue-200);
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+      }
+      .roi-card .roi-number {
+        font-size: 1.4em;
+        font-weight: 800;
+        color: var(--ghl-blue-600);
+        line-height: 1.1;
+      }
+      .roi-card .roi-label {
+        font-size: 0.55em;
+        color: #6b7280;
+        margin-top: 2px;
+        line-height: 1.25;
+      }
+      .roi-card.green {
+        border-color: #a7f3d0;
+      }
+      .roi-card.green .roi-number {
+        color: var(--ghl-green-500);
+      }
+
+      /* Node diagram */
+      .node-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 8px 0;
+      }
+      .node-box {
+        background: var(--ghl-blue-50);
+        border: 2px solid var(--ghl-blue-400);
+        border-radius: 8px;
+        padding: 8px 14px;
+        text-align: center;
+      }
+      .node-box .node-title {
+        font-size: 0.7em;
+        font-weight: 700;
+        color: var(--ghl-dark);
+      }
+      .node-box .node-sub {
+        font-size: 0.5em;
+        color: #6b7280;
+        margin-top: 1px;
+      }
+      .node-arrow {
+        font-size: 1em;
+        color: var(--ghl-blue-500);
+        font-weight: 700;
+      }
+      .node-loop {
+        font-size: 0.5em;
+        color: var(--ghl-blue-500);
+        text-align: center;
+        margin-top: -2px;
+      }
+
+      /* Footer bar */
+      .slide-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--ghl-blue-500), var(--ghl-teal-500));
+      }
+
+      .highlight {
+        color: var(--ghl-blue-500);
+        font-weight: 700;
+      }
+      .text-small {
+        font-size: 0.48em;
+        color: #6b7280;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 6px;
+      }
+
+      code {
+        font-size: 0.9em;
+        background: var(--ghl-blue-50);
+        padding: 0.1em 0.4em;
+        border-radius: 4px;
+        color: var(--ghl-blue-700);
+      }
+
+      .fullscreen-btn {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        z-index: 100;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 8px;
+        background: var(--ghl-dark);
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+      }
+      .fullscreen-btn:hover {
+        opacity: 1;
+      }
+      .fullscreen-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- ==================== SLIDE 1: TITLE ==================== -->
+        <section class="dark-slide title-slide">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
+          <div class="deco-ring deco-ring-1"></div>
+          <div class="deco-ring deco-ring-2"></div>
+          <h1>IATF AI Agent</h1>
+          <div class="accent-bar"></div>
+          <p class="subtitle">
+            AI-Assisted Action & Trigger Builder<br />for the Internal Actions and Triggers Framework
+          </p>
+          <div class="team-info">
+            <div class="team-label">Presented by</div>
+            <div class="team-members">Rhythm Bhiwani &amp; Sandeep Chakladar</div>
+            <div class="team-name">Workflows Extended Team</div>
+          </div>
+        </section>
+
+        <!-- ==================== SECTION 1: PROBLEM STATEMENT ==================== -->
+        <section class="section-divider">
+          <div class="section-number">01</div>
+          <h2>Problem Statement</h2>
+          <p>What's broken today and why it matters</p>
+        </section>
+
+        <section>
+          <span class="slide-label">Context</span>
+          <h2>What is IATF?</h2>
+          <p style="margin-bottom: 10px">
+            The <strong>Internal Actions & Triggers Framework (IATF)</strong> is a UI-based platform that enables
+            developers to create and configure workflow actions and triggers — without writing custom backend logic for
+            each one.
+          </p>
+          <div class="cap-grid">
+            <div class="cap-card">
+              <div class="cap-icon">🎛️</div>
+              <div class="cap-title">Dynamic Configuration</div>
+              <div class="cap-desc">
+                Instead of hardcoding behavior, IATF lets developers define actions and triggers through a configurable
+                UI, enabling rapid creation with dynamic input fields, validation rules, and API mappings.
+              </div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-icon">⚡</div>
+              <div class="cap-title">Workflow Foundation</div>
+              <div class="cap-desc">
+                IATF is the backbone of workflow automation, powering the actions and triggers that users rely on to
+                build their business processes inside HighLevel.
+              </div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-icon">🔌</div>
+              <div class="cap-title">Integration Apps</div>
+              <div class="cap-desc">
+                Beyond internal workflows, IATF now also powers all integration apps, enabling third-party integration
+                actions and triggers work with HighLevel.
+              </div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-icon">📈</div>
+              <div class="cap-title">Scale & Flexibility</div>
+              <div class="cap-desc">
+                With 200+ actions and triggers already built, IATF has proven its ability to scale, but this growth has
+                also exposed the limits of the manual configuration process.
+              </div>
+            </div>
+          </div>
+          <div class="slide-footer"></div>
+        </section>
+
+        <section>
+          <span class="slide-label">Problem</span>
+          <h2>Building IATF Integrations is Still Painful</h2>
+          <p style="margin-bottom: 10px">
+            While IATF provides a UI-based platform, the process of creating integrations remains tedious — developers
+            must understand a wide range of configuration options, manually research third-party APIs, and configure
+            every part of an action or trigger by hand.
+          </p>
+          <div class="pain-grid">
+            <div class="pain-card">
+              <div class="pain-title">Steep Learning Curve</div>
+              <div class="pain-desc">
+                The platform exposes dozens of configuration options — input field types, validation rules, dynamic
+                sources, and more. Developers need to know most of them to build correctly.
+              </div>
+            </div>
+            <div class="pain-card">
+              <div class="pain-title">API Research Overhead</div>
+              <div class="pain-desc">
+                Every third-party integration requires researching the correct endpoints, HTTP methods, request schemas,
+                and authentication flows before configuration can even begin.
+              </div>
+            </div>
+            <div class="pain-card">
+              <div class="pain-title">Manual, Part-by-Part Configuration</div>
+              <div class="pain-desc">
+                Each section of an action — inputs, API mapping, key format, variable prefix — must be configured
+                individually through the UI, making the process slow and repetitive.
+              </div>
+            </div>
+            <div class="pain-card">
+              <div class="pain-title">V1 AI Agent — Limited Help</div>
+              <div class="pain-desc">
+                A first version of an AI agent existed, but it only supported one-time generation with no ability to
+                update or iterate. Accuracy was low, so it provided a rough starting point at best — significant manual
+                effort was still required.
+              </div>
+            </div>
+          </div>
+          <div class="slide-footer"></div>
+        </section>
+
+        <section>
+          <span class="slide-label">Problem</span>
+          <h2>Business Impact</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="number">90–120 min</div>
+              <div class="label">per action/trigger<br />for manual configuration</div>
+            </div>
+            <div class="stat-card">
+              <div class="number">10–15</div>
+              <div class="label">actions/triggers built<br />per developer per month</div>
+            </div>
+            <div class="stat-card">
+              <div class="number">Fewer Integrations</div>
+              <div class="label">compared to competitors<br />due to slow build velocity</div>
+            </div>
+          </div>
+          <p style="margin-top: 12px; color: #6b7280">
+            The slow pace of integration development directly impacts our
+            <span class="highlight">competitive positioning</span> — fewer integrations means fewer marketplace apps
+            and a <span class="highlight">smaller ecosystem</span> compared to platforms that ship integrations faster.
+          </p>
+          <div class="slide-footer"></div>
+        </section>
+
+        <!-- ==================== SECTION 2: PROPOSED SOLUTION ==================== -->
+        <section class="section-divider">
+          <div class="section-number">02</div>
+          <h2>Proposed Solution</h2>
+          <p>Our approach and key design decisions</p>
+        </section>
+
+        <section>
+          <span class="slide-label">Solution</span>
+          <h2>AI-Powered Conversational Builder</h2>
+          <p>Describe integrations in natural language. Get complete, valid IATF configurations automatically.</p>
+          <div class="cap-grid">
+            <div class="cap-card">
+              <div class="cap-icon">💬</div>
+              <div class="cap-title">Natural Language → Config</div>
+              <div class="cap-desc">
+                "Build a Zoom create-meeting action" produces a complete, save-ready action JSON with all required
+                fields.
+              </div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-icon">⚡</div>
+              <div class="cap-title">Multi-Build</div>
+              <div class="cap-desc">
+                "Create an Airtable app with CRUD actions and a new-record trigger" — generates everything in a single
+                turn.
+              </div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-icon">🔧</div>
+              <div class="cap-title">Modify Existing</div>
+              <div class="cap-desc">
+                "Add a description input to the Slack send-message action" — fetches existing config and returns updated
+                version.
+              </div>
+            </div>
+            <div class="cap-card">
+              <div class="cap-icon">🔄</div>
+              <div class="cap-title">Self-Healing Saves</div>
+              <div class="cap-desc">
+                When a save fails validation, the error is automatically fed back to the agent, which fixes and
+                re-proposes.
+              </div>
+            </div>
+          </div>
+          <div class="slide-footer"></div>
+        </section>
+
+        <section>
+          <span class="slide-label">Solution</span>
+          <h2>Why This Approach?</h2>
+          <div class="two-col">
+            <div>
+              <h3>Design Decisions</h3>
+              <ul>
+                <li>
+                  <strong>LangGraph over a single prompt</strong> — agentic loop lets the LLM discover existing patterns
+                  before generating configs
+                </li>
+                <li>
+                  <strong>RAG-powered knowledge retrieval</strong> — dynamically loads the relevant knowledge base
+                  documents based on the user's requirements, ensuring the agent always has the right context
+                </li>
+                <li>
+                  <strong>Agent never asks technical questions</strong> — only asks about business intent, researches
+                  APIs and schemas itself
+                </li>
+                <li>
+                  <strong>Structured clarifications</strong> — interactive forms with selectable options, not free-text
+                  back-and-forth
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3>Why Not Alternatives?</h3>
+              <ul>
+                <li>
+                  <strong>Template-based codegen:</strong> Too rigid — can't handle the variation across 200+
+                  integrations and arbitrary API shapes
+                </li>
+                <li>
+                  <strong>Single-shot prompt:</strong> Lacks context — can't inspect existing actions or search docs
+                  mid-generation
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="slide-footer"></div>
+        </section>
+
+        <!-- ==================== SECTION 3: LIVE DEMO ==================== -->
+        <section class="dark-slide demo-slide">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="deco-ring deco-ring-1"></div>
+          <div class="deco-ring deco-ring-3"></div>
+          <div class="demo-icon">🖥️</div>
+          <h2>Live Demo</h2>
+          <p><span class="demo-pulse"></span>Building integrations with the IATF AI Agent</p>
+          <p style="margin-top: 16px; color: var(--ghl-gray-300)">
+            Natural Language → Config Generation → Review → Save
+          </p>
+        </section>
+
+        <!-- ==================== SECTION 4: TECHNICAL DEEP DIVE ==================== -->
+        <section class="section-divider">
+          <div class="section-number">04</div>
+          <h2>Technical Deep Dive</h2>
+          <p>Architecture, AI/tooling choices, and stack integration</p>
+        </section>
+
+        <section>
+          <span class="slide-label">Architecture</span>
+          <h2>High-Level Architecture</h2>
+          <svg
+            viewBox="0 0 860 420"
+            style="width: 100%; max-width: 860px; margin: 6px auto 0; display: block"
+            xmlns="http://www.w3.org/2000/svg"
+            font-family="Inter, sans-serif"
+          >
+            <!-- Frontend box -->
+            <rect x="30" y="10" width="800" height="120" rx="10" fill="#F3F9FF" stroke="#C5E2FD" stroke-width="2" />
+            <text x="50" y="34" font-size="13" font-weight="700" fill="#0C2D3F">Frontend (Vue 3)</text>
+            <!-- AI Assist Frontend -->
+            <rect x="180" y="40" width="500" height="80" rx="6" fill="#fff" stroke="#178AF6" stroke-width="1.5" />
+            <text x="430" y="68" font-size="14" font-weight="700" fill="#0C2D3F" text-anchor="middle">AI Assist Frontend</text>
+            <text x="430" y="88" font-size="10" fill="#6B7280" text-anchor="middle">Sessions &middot; Chat &middot; Clarifications &middot; Config Preview &middot; Save / Open</text>
+            <text x="430" y="104" font-size="10" fill="#6B7280" text-anchor="middle">Conversational UI for building actions &amp; triggers</text>
+
+            <!-- Arrow down -->
+            <line x1="430" y1="130" x2="430" y2="165" stroke="#178AF6" stroke-width="2" />
+            <polygon points="424,162 430,174 436,162" fill="#178AF6" />
+            <text x="452" y="155" font-size="10" font-weight="600" fill="#178AF6">REST API</text>
+
+            <!-- Backend box -->
+            <rect x="30" y="178" width="800" height="232" rx="10" fill="#F3F9FF" stroke="#C5E2FD" stroke-width="2" />
+            <text x="50" y="200" font-size="13" font-weight="700" fill="#0C2D3F">Backend (NestJS)</text>
+
+            <!-- Pipeline box -->
+            <rect
+              x="60"
+              y="210"
+              width="740"
+              height="120"
+              rx="8"
+              fill="#E8F3FE"
+              stroke="#178AF6"
+              stroke-width="1.5"
+              stroke-dasharray="6 3"
+            />
+            <text x="430" y="230" font-size="12" font-weight="600" fill="#0E5394" text-anchor="middle">
+              LangGraph Agent Pipeline
+            </text>
+
+            <!-- RAG node -->
+            <rect x="110" y="244" width="120" height="56" rx="6" fill="#EBF6FB" stroke="#38A0DB" stroke-width="2" />
+            <text x="170" y="266" font-size="12" font-weight="700" fill="#0C2D3F" text-anchor="middle">RAG</text>
+            <text x="170" y="282" font-size="9" fill="#6B7280" text-anchor="middle">Intent &middot; Vector Search</text>
+            <text x="170" y="294" font-size="9" fill="#6B7280" text-anchor="middle">Load References</text>
+
+            <!-- Arrow RAG to Agent -->
+            <line x1="230" y1="272" x2="290" y2="272" stroke="#178AF6" stroke-width="2" />
+            <polygon points="286,266 298,272 286,278" fill="#178AF6" />
+
+            <!-- Agent node -->
+            <rect x="300" y="244" width="150" height="56" rx="6" fill="#fff" stroke="#178AF6" stroke-width="2" />
+            <text x="375" y="266" font-size="12" font-weight="700" fill="#0C2D3F" text-anchor="middle">
+              Agent (GPT-5.2)
+            </text>
+            <text x="375" y="282" font-size="9" fill="#6B7280" text-anchor="middle">System Prompt + Context</text>
+            <text x="375" y="294" font-size="9" fill="#6B7280" text-anchor="middle">Tool Calls / Response</text>
+
+            <!-- Arrow Agent to Tools -->
+            <line x1="450" y1="272" x2="510" y2="272" stroke="#178AF6" stroke-width="2" />
+            <polygon points="506,266 518,272 506,278" fill="#178AF6" />
+
+            <!-- Tools node -->
+            <rect x="520" y="244" width="130" height="56" rx="6" fill="#EAF7EA" stroke="#2EAD2E" stroke-width="2" />
+            <text x="585" y="266" font-size="12" font-weight="700" fill="#0C2D3F" text-anchor="middle">Tools</text>
+            <text x="585" y="282" font-size="9" fill="#6B7280" text-anchor="middle">fetch_action &middot; search</text>
+            <text x="585" y="294" font-size="9" fill="#6B7280" text-anchor="middle">list &middot; find_similar</text>
+
+            <!-- Loop arrow back from Tools to Agent -->
+            <path
+              d="M585,300 L585,318 L375,318 L375,300"
+              fill="none"
+              stroke="#178AF6"
+              stroke-width="1.5"
+              stroke-dasharray="4 2"
+            />
+            <polygon points="369,304 375,296 381,304" fill="#178AF6" />
+            <text x="480" y="314" font-size="9" font-weight="500" fill="#178AF6" text-anchor="middle">
+              loop until provide_response
+            </text>
+
+            <!-- Knowledge Base -->
+            <rect x="80" y="346" width="220" height="50" rx="6" fill="#fff" stroke="#C5E2FD" stroke-width="1.5" />
+            <text x="190" y="368" font-size="12" font-weight="600" fill="#0C2D3F" text-anchor="middle">
+              Knowledge Base
+            </text>
+            <text x="190" y="384" font-size="10" fill="#6B7280" text-anchor="middle">
+              Docs + Chunks + Vector Search
+            </text>
+
+            <!-- MongoDB -->
+            <rect x="360" y="346" width="220" height="50" rx="6" fill="#fff" stroke="#C5E2FD" stroke-width="1.5" />
+            <text x="470" y="368" font-size="12" font-weight="600" fill="#0C2D3F" text-anchor="middle">MongoDB</text>
+            <text x="470" y="384" font-size="10" fill="#6B7280" text-anchor="middle">
+              Sessions &middot; Messages &middot; Drafts
+            </text>
+          </svg>
+          <div class="slide-footer"></div>
+        </section>
+
+        <section>
+          <span class="slide-label">Architecture</span>
+          <h2>Agent Tools & Knowledge Base</h2>
+          <p style="margin-bottom: 10px">
+            The agent is equipped with specialized tools to discover existing patterns and a RAG-powered knowledge
+            base to ground its output in real documentation.
+          </p>
+          <div class="two-col">
+            <div>
+              <h3>Agent Tools</h3>
+              <ul>
+                <li><code>fetch_existing_action / trigger</code> — retrieve a saved config by name</li>
+                <li><code>list_sections</code> — browse available integration app sections</li>
+                <li><code>list_actions / triggers</code> — list all actions or triggers within a section</li>
+                <li><code>find_similar_actions / triggers</code> — discover similar patterns to use as reference</li>
+                <li><code>search_documentation</code> — query the knowledge base for relevant schema and API docs</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Knowledge Base (RAG)</h3>
+              <ul>
+                <li><strong>MongoDB Atlas vector search</strong> for semantic document retrieval</li>
+                <li><strong>OpenAI <code>text-embedding-3-small</code></strong> for embedding generation</li>
+                <li><strong>Structure docs</strong> — IATF schema reference and field definitions</li>
+                <li><strong>Per-app API docs</strong> — third-party API documentation for each integration</li>
+              </ul>
+            </div>
+          </div>
+          <div class="slide-footer"></div>
+        </section>
+
+
+        <!-- ==================== SECTION 5: PRODUCTION PLAN ==================== -->
+        <section class="section-divider">
+          <div class="section-number">05</div>
+          <h2>Production Plan & Timeline</h2>
+          <p>Where we are and what's next</p>
+        </section>
+
+        <section>
+          <span class="slide-label">Production</span>
+          <h2>Rollout Timeline</h2>
+          <div class="timeline">
+            <div class="timeline-item done">
+              <div class="tl-phase">Phase 1 — Core Agent (Complete ✓)</div>
+              <div class="tl-detail">
+                LangGraph pipeline, RAG knowledge base, natural language → config generation, multi-build, modify
+                existing actions/triggers, self-healing saves
+              </div>
+            </div>
+            <div class="timeline-item done">
+              <div class="tl-phase">Phase 2 — Frontend & Sessions (Complete ✓)</div>
+              <div class="tl-detail">
+                Three-panel UI, multi-session management, draft-to-save pipeline, structured clarifications, config
+                preview
+              </div>
+            </div>
+            <div class="timeline-item done">
+              <div class="tl-phase">Phase 3 — V1 Live for Workflows Team (Complete ✓)</div>
+              <div class="tl-detail">
+                First version deployed and actively used by the internal workflows team for daily integration building
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="tl-phase">Ongoing — Continuous Improvement</div>
+              <div class="tl-detail">
+                Action testing agent (coming soon), analytics & quality tracking,
+                knowledge base expansion, overall optimizations & configurability
+              </div>
+            </div>
+          </div>
+          <p style="margin-top: 10px; color: #6b7280">
+            <strong>Dependencies:</strong> Internal tool — self-contained within marketplace monorepo. No external team
+            dependencies. Uses existing MongoDB Atlas and OpenAI API infrastructure.
+          </p>
+          <div class="slide-footer"></div>
+        </section>
+
+        <!-- ==================== SECTION 6: RISK & ROI ==================== -->
+        <section class="section-divider">
+          <div class="section-number">06</div>
+          <h2>Risk Assessment & ROI</h2>
+          <p>What could go wrong and the quantified impact</p>
+        </section>
+
+        <section>
+          <span class="slide-label">Risk</span>
+          <h2>Risk Assessment</h2>
+          <table class="risk-table">
+            <thead>
+              <tr>
+                <th style="width: 25%">Risk</th>
+                <th style="width: 35%">Impact</th>
+                <th style="width: 40%">Mitigation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>LLM hallucination</strong></td>
+                <td>Agent generates invalid config fields or wrong API endpoints</td>
+                <td>
+                  RAG grounds output in real schema docs + existing configs. Self-healing loop catches validation errors
+                  automatically.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>LLM API latency/cost</strong></td>
+                <td>Slow response times or high API spend</td>
+                <td>
+                  Continuously analyzing usage patterns and optimizing prompts, tool calls, and model selection to
+                  reduce latency and cost over time.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Knowledge base gaps</strong></td>
+                <td>Missing docs for new integrations leads to lower quality output</td>
+                <td>
+                  Keeping the knowledge base continuously updated as new integrations are added. A dedicated AI agent
+                  assists with knowledge base maintenance and expansion.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Schema evolution</strong></td>
+                <td>IATF schema changes could break generated configs</td>
+                <td>
+                  Keeping the structure documentation up to date whenever changes are made to the framework, ensuring
+                  the agent always reflects the latest schema.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="slide-footer"></div>
+        </section>
+
+        <section>
+          <span class="slide-label">ROI</span>
+          <h2>Return on Investment</h2>
+          <div class="comparison">
+            <div class="compare-col before">
+              <h3>Before (Manual)</h3>
+              <ul>
+                <li>90–120 min per action/trigger</li>
+                <li>10–15 built per developer per month</li>
+                <li>Deep IATF knowledge required</li>
+                <li>Sequential, one-at-a-time building</li>
+              </ul>
+            </div>
+            <div class="compare-arrow">→</div>
+            <div class="compare-col after">
+              <h3>After (AI Agent)</h3>
+              <ul>
+                <li>~5 min per action/trigger</li>
+                <li>Potential 10–20x throughput increase</li>
+                <li>Minimal schema knowledge needed</li>
+                <li>Low error rate — self-healing saves</li>
+                <li>Multi-build in a single conversation</li>
+              </ul>
+            </div>
+          </div>
+          <div class="roi-grid" style="margin-top: 10px">
+            <div class="roi-card green">
+              <div class="roi-number">18–24x</div>
+              <div class="roi-label">faster per action/trigger<br />(90–120 min → 5 min)</div>
+            </div>
+            <div class="roi-card">
+              <div class="roi-number">~90%</div>
+              <div class="roi-label">reduction in schema-related<br />debugging and errors</div>
+            </div>
+          </div>
+          <div class="slide-footer"></div>
+        </section>
+
+        <!-- ==================== Q&A ==================== -->
+        <section class="dark-slide end-slide">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
+          <div class="deco-ring deco-ring-1"></div>
+          <div class="deco-ring deco-ring-2"></div>
+          <div class="deco-ring deco-ring-3"></div>
+          <h2>Q & A</h2>
+          <div class="end-line"></div>
+          <p>Thank you!</p>
+          <div class="team-info">
+            <div class="team-members">Rhythm Bhiwani &amp; Sandeep Chakladar</div>
+            <div class="team-name">Workflows Extended Team</div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <button class="fullscreen-btn" id="fsBtn" title="Toggle fullscreen">
+      <svg
+        id="fsEnter"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="15 3 21 3 21 9" />
+        <polyline points="9 21 3 21 3 15" />
+        <line x1="21" y1="3" x2="14" y2="10" />
+        <line x1="3" y1="21" x2="10" y2="14" />
+      </svg>
+      <svg
+        id="fsExit"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        style="display: none"
+      >
+        <polyline points="4 14 10 14 10 20" />
+        <polyline points="20 10 14 10 14 4" />
+        <line x1="14" y1="10" x2="21" y2="3" />
+        <line x1="3" y1="21" x2="10" y2="14" />
+      </svg>
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: 'c/t',
+        width: 960,
+        height: 540,
+        margin: 0,
+        minScale: 0.2,
+        maxScale: 2.0,
+        transition: 'slide',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+        center: true,
+        controls: true,
+        progress: true
+      })
+
+      const fsBtn = document.getElementById('fsBtn')
+      const fsEnter = document.getElementById('fsEnter')
+      const fsExit = document.getElementById('fsExit')
+
+      function updateIcon() {
+        const isFs = !!document.fullscreenElement
+        fsEnter.style.display = isFs ? 'none' : 'block'
+        fsExit.style.display = isFs ? 'block' : 'none'
+      }
+
+      fsBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen()
+        } else {
+          document.exitFullscreen()
+        }
+      })
+
+      document.addEventListener('fullscreenchange', updateIcon)
+    </script>
+  </body>
+</html>
